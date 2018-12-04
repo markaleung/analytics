@@ -11,7 +11,8 @@ main(dimensions, metrics, filter_, start, end)
 - filter_ is a DimensionFilters dictionary such as {"dimensionName": "ga:browser", "operator": "EXACT", "expressions": ["Chrome"]}. 
 - start is a date string. 
 - end is a date string. 
-- This method returns all data for results that span multiple pages. 
+
+The method returns a Pandas DataFrame with one column for each dimension and metric. It returns all data for multipage results. 
 
 For more information about dimensions, and metrics, see https://developers.google.com/analytics/devguides/reporting/core/dimsmets. 
 
