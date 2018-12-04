@@ -14,8 +14,8 @@ credentials = ServiceAccountCredentials.from_json_keyfile_name(
 # Build the service object.
 analytics = build('analyticsreporting', 'v4', credentials=credentials)
 
-def get_report(dimension, metric, filter_, start, end, pageToken):
-	makeList = lambda item, name: [{name: i} for i in item] if isinstance(item, list) else [{name: item}]
+def get_report(dimensions, metrics, filter_, start, end, pageToken):
+	makeList = lambda item, name: [{name: i} for i in item]
 	return analytics.reports().batchGet(body={'reportRequests': [{
 		'viewId': VIEW_ID,
 		'dateRanges': [{'startDate': start, 'endDate': end}],
@@ -40,13 +40,13 @@ def print_response2(response):
 	df = pd.DataFrame(output, columns = dimensionHeader+metricHeader)
 	return df, report.get('nextPageToken', None)
 	
-def main(dimension, metric, filter_, start, end):
+def main(dimensions, metrics, filter_, start, end):
 	pageToken = '0'
 	tables = []
 	while pageToken:
-		response = get_report(dimension, metric, filter_, start, end, pageToken)
+		response = get_report(dimensions, metrics, filter_, start, end, pageToken)
 		df, pageToken = print_response2(response)
 		tables.append(df)
 		size = pageToken if pageToken else len(df)
-		print(size, dimension, metric, start, end)
+		print(size, dimensions, metrics, start, end)
 	return pd.concat(tables)
